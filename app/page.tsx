@@ -1,5 +1,5 @@
 const GITHUB_URL = "https://github.com/quantclaw-ai/QuantClaw";
-const EMAIL = "slzhang0824@gmail.com";
+const EMAIL = "harry@quantclaw-ai.com";
 
 const FEATURES = [
   {

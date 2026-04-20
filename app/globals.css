@@ -124,6 +124,17 @@ body {
   top: 4%;
   bottom: 4%;
 }
+.agent-card-open {
+  border-color: color-mix(in oklab, var(--accent, var(--color-circuit)) 55%, transparent);
+  background-color: color-mix(in oklab, var(--accent, var(--color-circuit)) 6%, transparent);
+  box-shadow: 0 0 28px color-mix(in oklab, var(--accent, var(--color-circuit)) 22%, transparent);
+}
+.agent-card-open::before {
+  opacity: 1;
+  top: 4%;
+  bottom: 4%;
+  width: 3px;
+}
 
 .feature-card {
   position: relative;

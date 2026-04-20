@@ -19,7 +19,8 @@ export const LOCALE_META: Record<Lang, { label: string; short: string; href: str
 export const GITHUB_URL = "https://github.com/quantclaw-ai/QuantClaw";
 export const EMAIL = "harry@quantclaw-ai.com";
 
-// Agent roster — names + glyphs + colors are universal; roles translated below.
+// Agent roster order: Reporter sits in the middle (index 6) because it is
+// the one agent that always runs last in every plan — a natural centerpiece.
 export const AGENT_ROSTER: { key: string; color: string; glyph: string }[] = [
   { key: "scheduler",    color: "#f59e0b", glyph: "M" },
   { key: "sentinel",     color: "#f43f5e", glyph: "W" },
@@ -27,16 +28,22 @@ export const AGENT_ROSTER: { key: string; color: string; glyph: string }[] = [
   { key: "ingestor",     color: "#3b82f6", glyph: "⇵" },
   { key: "miner",        color: "#ef4444", glyph: "⛏" },
   { key: "trainer",      color: "#ec4899", glyph: "◈" },
+  { key: "reporter",     color: "#f97316", glyph: "▤" },   // ← middle
   { key: "backtester",   color: "#8b5cf6", glyph: "↻" },
   { key: "evaluator",    color: "#14b8a6", glyph: "✓" },
   { key: "executor",     color: "#22c55e", glyph: "⟶" },
   { key: "risk_monitor", color: "#a855f7", glyph: "⛨" },
   { key: "compliance",   color: "#6366f1", glyph: "§" },
   { key: "debugger",     color: "#eab308", glyph: "⊘" },
-  { key: "reporter",     color: "#f97316", glyph: "▤" },
 ];
 
 // ─── Translation shape ──────────────────────────────────────────────
+
+export interface AgentEntry {
+  name: string;
+  role: string;        // one-line summary shown collapsed
+  description: string; // rich description shown on expand
+}
 
 export interface Dictionary {
   meta: { title: string; description: string };
@@ -53,7 +60,8 @@ export interface Dictionary {
     eyebrow: string;
     title: string;
     intro: string;
-    list: { name: string; role: string }[];  // same order as AGENT_ROSTER
+    clickHint: string;
+    list: AgentEntry[];  // same order as AGENT_ROSTER
   };
   features: {
     eyebrow: string;
@@ -106,20 +114,34 @@ const EN: Dictionary = {
     eyebrow: "THE ROSTER",
     title: "Thirteen Pets on the Floor",
     intro: "Every agent has a scoped job declared in a single manifest. The planner reads it, the dispatcher runs it, and you watch it on the trading floor.",
+    clickHint: "Click any pet to see what it does",
     list: [
-      { name: "Scheduler",    role: "Cron trigger daemon" },
-      { name: "Sentinel",     role: "Reactive alert guardian" },
-      { name: "Researcher",   role: "LLM-driven factor hypothesis search" },
-      { name: "Ingestor",     role: "Market data fetcher with range-aware cache" },
-      { name: "Miner",        role: "Evolutionary factor discovery in sandbox" },
-      { name: "Trainer",      role: "Sandboxed ML training — xgboost / lightgbm / lstm / …" },
-      { name: "Backtester",   role: "Historical strategy replay" },
-      { name: "Evaluator",    role: "Held-out validation, calibrated over time" },
-      { name: "Executor",     role: "Paper / live order submission" },
-      { name: "Risk Monitor", role: "Drawdown, concentration, leverage daemon" },
-      { name: "Compliance",   role: "Rule-based trade gatekeeper" },
-      { name: "Debugger",     role: "LLM diagnostic on cycle failures" },
-      { name: "Reporter",     role: "Executive summary, always last step" },
+      { name: "Scheduler",    role: "Cron trigger daemon",
+        description: "The clockwork heart of the floor. Fires cycle triggers on a configurable cron, watches for market opens and closes, and routes the \"wake up\" signal to whichever agents the current phase needs. Doesn't think — just ticks." },
+      { name: "Sentinel",     role: "Reactive alert guardian",
+        description: "Subscribes to every event on the bus and pattern-matches against a rules table — agent failure streaks, drawdown warnings, regime changes. Fires alerts routed to Telegram / Discord / Slack by urgency. Never planned, always listening." },
+      { name: "Researcher",   role: "LLM-driven factor hypothesis search",
+        description: "Given a goal, proposes factor families, alternative datasets, and model types to explore. Calls the web_search tool to pull papers and news, then hands concrete suggestions to the ingestor and miner." },
+      { name: "Ingestor",     role: "Market data fetcher with range-aware cache",
+        description: "Pulls OHLCV and fundamentals from twenty data providers through a shared range-aware parquet cache. Only fetches the missing slice of any request — no duplicate downloads, and any range older than seven days is frozen immutable." },
+      { name: "Miner",        role: "Evolutionary factor discovery in sandbox",
+        description: "Generates candidate factor expressions with an LLM, evaluates each in the sandbox, then mutates the top performers across several generations. Every expression runs in a subprocess with AST validation and hard resource limits." },
+      { name: "Trainer",      role: "Sandboxed ML training — xgboost / lightgbm / lstm / …",
+        description: "Trains models on the discovered factors — gradient boosting, xgboost, lightgbm, lstm, transformer, and more. Emits a concrete Strategy class with signals() and allocate() implemented, saved to data/strategies/ for the backtester and executor to pick up." },
+      { name: "Reporter",     role: "Executive summary, always last step",
+        description: "Always the last step of any plan. Reads every upstream result in the pipeline and writes a human-readable summary into the chat narrative. No actions of its own — pure synthesis." },
+      { name: "Backtester",   role: "Historical strategy replay",
+        description: "Replays a strategy against historical data with realistic transaction costs and slippage. Computes Sharpe, drawdown, turnover, trade count, and per-trade P&L. Runs deterministically in the sandbox — no LLM involvement." },
+      { name: "Evaluator",    role: "Held-out validation, calibrated over time",
+        description: "Re-runs the chosen strategy on a held-out window that was never touched during training. Compares against the backtester's Sharpe to flag overfit candidates. Calibrated over time — learns which factor families reliably degrade out of sample." },
+      { name: "Executor",     role: "Paper / live order submission",
+        description: "In paper phase, loads each active strategy, computes target weights, aggregates them across deployments, and submits rebalance orders through the paper broker. In live mode, every order batch goes through compliance and risk gates first." },
+      { name: "Risk Monitor", role: "Drawdown, concentration, leverage daemon",
+        description: "Runs continuously. Tracks portfolio-level drawdown, per-position sizing, sector concentration, and leverage. Can veto the executor before any order reaches the broker if a metric crosses its configured limit." },
+      { name: "Compliance",   role: "Rule-based trade gatekeeper",
+        description: "Not an LLM — pure rule evaluation. Checks each order batch against jurisdiction rules, account restrictions, and sanctioned-instrument lists. Blocks violations before the broker ever sees them." },
+      { name: "Debugger",     role: "LLM diagnostic on cycle failures",
+        description: "Only runs when something has failed. Given the failing step's error context, stack trace, and surrounding cycle results, proposes a root cause plus an adjustment for the next cycle. Purely reactive — never part of a happy path." },
     ],
   },
   features: {
@@ -210,20 +232,34 @@ const ZH: Dictionary = {
     eyebrow: "名册",
     title: "交易大厅上的十三只宠物",
     intro: "每个代理在统一清单中都有明确的职责。规划者读取它,调度者执行它,你则在交易大厅上观察它们工作。",
+    clickHint: "点击任一只宠物,查看它的具体工作",
     list: [
-      { name: "调度器 Scheduler",      role: "定时触发守护进程" },
-      { name: "哨兵 Sentinel",         role: "响应式警报守护" },
-      { name: "研究员 Researcher",     role: "LLM 驱动的因子假设搜索" },
-      { name: "采集器 Ingestor",       role: "区间感知缓存的行情数据抓取器" },
-      { name: "矿工 Miner",            role: "沙盒中的演化式因子发现" },
-      { name: "训练师 Trainer",        role: "沙盒化 ML 训练 — xgboost / lightgbm / lstm / …" },
-      { name: "回测器 Backtester",     role: "历史策略回放" },
-      { name: "评估器 Evaluator",      role: "持出法校验,长期持续校准" },
-      { name: "执行器 Executor",       role: "纸面 / 实盘订单提交" },
-      { name: "风控 Risk Monitor",     role: "回撤、集中度、杠杆监控守护" },
-      { name: "合规 Compliance",       role: "规则式交易关口" },
-      { name: "调试员 Debugger",       role: "失败循环的 LLM 诊断" },
-      { name: "报告员 Reporter",       role: "执行摘要,总是流水线最后一步" },
+      { name: "调度器 Scheduler",      role: "定时触发守护进程",
+        description: "交易大厅的时钟心脏。按可配置的 cron 触发循环,监听开市与闭市,把「唤醒」信号路由到当前阶段需要的代理。它不思考 — 只是滴答作响。" },
+      { name: "哨兵 Sentinel",         role: "响应式警报守护",
+        description: "订阅事件总线上的一切,按规则表进行模式匹配 — 代理失败连击、回撤告警、市场机制变化。按紧急程度把告警路由到 Telegram / Discord / Slack。永远不在计划里,永远在聆听。" },
+      { name: "研究员 Researcher",     role: "LLM 驱动的因子假设搜索",
+        description: "给它一个目标,它会提出要探索的因子家族、替代数据集和模型类型。调用 web_search 工具获取论文和新闻,然后把具体建议交给采集器和矿工。" },
+      { name: "采集器 Ingestor",       role: "区间感知缓存的行情数据抓取器",
+        description: "通过共享的区间感知 parquet 缓存,从二十家数据源拉取 OHLCV 和基本面。只抓取请求中缺失的区间 — 无重复下载,七天之外的历史区间被冻结为不可变。" },
+      { name: "矿工 Miner",            role: "沙盒中的演化式因子发现",
+        description: "用 LLM 生成候选因子表达式,在沙盒中评估每一个,并在若干代中让优秀者继续变异。每个表达式都在带 AST 校验与硬资源上限的子进程中运行。" },
+      { name: "训练师 Trainer",        role: "沙盒化 ML 训练 — xgboost / lightgbm / lstm / …",
+        description: "在发现的因子上训练模型 — gradient boosting、xgboost、lightgbm、lstm、transformer 等。产出实现了 signals() 与 allocate() 的具体 Strategy 类,保存到 data/strategies/ 以供回测器和执行器使用。" },
+      { name: "报告员 Reporter",       role: "执行摘要,总是流水线最后一步",
+        description: "任何计划的最后一步。读取流水线上的每一个上游结果,把人类可读的摘要写入聊天叙事。它没有自己的动作 — 纯粹的综合。" },
+      { name: "回测器 Backtester",     role: "历史策略回放",
+        description: "按真实交易成本与滑点模型,把策略在历史数据上回放。计算 Sharpe、回撤、换手、交易数和每笔盈亏。在沙盒中确定性运行 — 不涉及 LLM。" },
+      { name: "评估器 Evaluator",      role: "持出法校验,长期持续校准",
+        description: "在训练期间从未接触的持出窗口上重新运行选中的策略。与回测器的 Sharpe 对比以识别过拟合候选。长期持续校准 — 学会哪些因子家族在样本外会稳定衰减。" },
+      { name: "执行器 Executor",       role: "纸面 / 实盘订单提交",
+        description: "在纸面阶段,加载每个活跃策略,计算目标权重,跨部署聚合,并通过纸面券商提交再平衡订单。在实盘模式下,每一批订单都会先走合规与风控关口。" },
+      { name: "风控 Risk Monitor",     role: "回撤、集中度、杠杆监控守护",
+        description: "持续运行。跟踪组合级回撤、单仓位大小、行业集中度和杠杆。任何指标越过其配置上限时,都可以在订单到达券商之前否决执行器。" },
+      { name: "合规 Compliance",       role: "规则式交易关口",
+        description: "不是 LLM — 纯规则评估。按司法管辖规则、账户限制和制裁工具清单检查每一批订单。在券商看到之前就拦截违规。" },
+      { name: "调试员 Debugger",       role: "失败循环的 LLM 诊断",
+        description: "只在出错时运行。给定失败步骤的错误上下文、堆栈和邻近循环结果,提出根本原因以及下一循环的调整建议。纯粹响应式 — 从不存在于顺利路径里。" },
     ],
   },
   features: {
@@ -314,20 +350,34 @@ const JA: Dictionary = {
     eyebrow: "ロスター",
     title: "トレーディングフロアの十三匹",
     intro: "すべてのエージェントは単一のマニフェストで役割を宣言しています。プランナーが読み、ディスパッチャが実行し、あなたはトレーディングフロアで観察します。",
+    clickHint: "ペットをクリックして働き方を見る",
     list: [
-      { name: "Scheduler スケジューラー",  role: "cron トリガーのデーモン" },
-      { name: "Sentinel センチネル",       role: "リアクティブなアラート守護" },
-      { name: "Researcher リサーチャー",   role: "LLM 駆動のファクター仮説探索" },
-      { name: "Ingestor インジェスター",   role: "レンジ対応キャッシュを持つ市場データ取得" },
-      { name: "Miner マイナー",            role: "サンドボックス内での進化的ファクター発見" },
-      { name: "Trainer トレーナー",        role: "サンドボックス化された ML 学習 — xgboost / lightgbm / lstm / …" },
-      { name: "Backtester バックテスター", role: "過去データでの戦略リプレイ" },
-      { name: "Evaluator エバリュエーター", role: "ホールドアウト検証、長期キャリブレーション" },
-      { name: "Executor エグゼキューター", role: "ペーパー / ライブ注文の送信" },
-      { name: "Risk Monitor リスクモニター", role: "ドローダウン・集中・レバレッジ監視デーモン" },
-      { name: "Compliance コンプライアンス", role: "ルールベースの取引ゲートキーパー" },
-      { name: "Debugger デバッガー",       role: "サイクル失敗時の LLM 診断" },
-      { name: "Reporter レポーター",       role: "常に最後に走るエグゼクティブサマリー" },
+      { name: "Scheduler スケジューラー",  role: "cron トリガーのデーモン",
+        description: "トレーディングフロアの時計仕掛けの心臓。設定可能な cron で周期トリガーを発火し、開場・閉場を監視、「起きろ」の合図を現フェーズで必要なエージェントへルーティングします。考えません — ただ刻みます。" },
+      { name: "Sentinel センチネル",       role: "リアクティブなアラート守護",
+        description: "イベントバスのすべてを購読し、ルールテーブルに対してパターンマッチします — エージェント連続失敗、ドローダウン警告、市場レジーム変化。緊急度に応じて Telegram / Discord / Slack にアラートを振り分けます。計画には入らず、常に聞いています。" },
+      { name: "Researcher リサーチャー",   role: "LLM 駆動のファクター仮説探索",
+        description: "ゴールを与えれば、探索すべきファクター群・代替データセット・モデル型を提案します。web_search ツールで論文やニュースを取り込み、具体的な提案をインジェスターとマイナーに渡します。" },
+      { name: "Ingestor インジェスター",   role: "レンジ対応キャッシュを持つ市場データ取得",
+        description: "20 のデータ提供元から OHLCV とファンダメンタルを、共通のレンジ対応 parquet キャッシュ経由で取得します。リクエストの欠けているスライスだけを取りに行く — 重複ダウンロードなし、7 日より古いレンジは不変として凍結。" },
+      { name: "Miner マイナー",            role: "サンドボックス内での進化的ファクター発見",
+        description: "LLM で候補ファクター式を生成し、サンドボックスで各式を評価、上位を何世代かにわたって変異させます。すべての式は AST 検証とハードなリソース上限付きのサブプロセスで走ります。" },
+      { name: "Trainer トレーナー",        role: "サンドボックス化された ML 学習 — xgboost / lightgbm / lstm / …",
+        description: "発見されたファクターでモデルを学習します — gradient boosting、xgboost、lightgbm、lstm、transformer など。signals() と allocate() を実装した具体的な Strategy クラスを data/strategies/ に保存し、バックテスターとエグゼキューターが拾えるようにします。" },
+      { name: "Reporter レポーター",       role: "常に最後に走るエグゼクティブサマリー",
+        description: "どの計画でも常に最終ステップ。パイプラインのすべての上流結果を読み、人間が読めるサマリーをチャットナラティブに書き込みます。独自のアクションはなし — 純粋な総合。" },
+      { name: "Backtester バックテスター", role: "過去データでの戦略リプレイ",
+        description: "現実的な取引コストとスリッページのモデルで、戦略を過去データ上にリプレイ。Sharpe、ドローダウン、回転率、取引数、取引ごとの PnL を計算。サンドボックスで決定論的に走ります — LLM は使いません。" },
+      { name: "Evaluator エバリュエーター", role: "ホールドアウト検証、長期キャリブレーション",
+        description: "学習中に一切触れていないホールドアウト窓で、選ばれた戦略を再実行します。バックテスターの Sharpe と比較し過学習候補を炙り出します。長期キャリブレーション — どのファクター群がアウトオブサンプルで確実に劣化するかを学びます。" },
+      { name: "Executor エグゼキューター", role: "ペーパー / ライブ注文の送信",
+        description: "ペーパー期間では、各アクティブ戦略をロードし、ターゲットウェイトを算出、デプロイ全体で集約、ペーパーブローカー経由でリバランス注文を送信します。ライブモードでは、注文バッチは先にコンプライアンスとリスクゲートを通ります。" },
+      { name: "Risk Monitor リスクモニター", role: "ドローダウン・集中・レバレッジ監視デーモン",
+        description: "常時稼働。ポートフォリオレベルのドローダウン、ポジションサイズ、セクター集中、レバレッジを追跡。どれかが設定上限を超えると、ブローカーに届く前にエグゼキューターを拒否できます。" },
+      { name: "Compliance コンプライアンス", role: "ルールベースの取引ゲートキーパー",
+        description: "LLM ではなく — 純粋なルール評価です。各注文バッチを管轄ルール、アカウント制限、制裁銘柄リストに照らしチェックし、ブローカーが見る前に違反を止めます。" },
+      { name: "Debugger デバッガー",       role: "サイクル失敗時の LLM 診断",
+        description: "失敗時のみ稼働します。失敗ステップのエラーコンテキスト、スタックトレース、周辺サイクル結果を与えると、根本原因と次サイクルの調整案を提示します。純粋に反応的 — 幸福な計画には存在しません。" },
     ],
   },
   features: {

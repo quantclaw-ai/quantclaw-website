@@ -1,5 +1,4 @@
 import {
-  AGENT_ROSTER,
   COPY,
   EMAIL,
   GITHUB_URL,
@@ -7,6 +6,7 @@ import {
   LOCALES,
   type Lang,
 } from "./copy";
+import { AgentRoster } from "./AgentRoster";
 
 const stagger = (i: number, base = 0.08) => ({ animationDelay: `${base + i * 0.05}s` });
 
@@ -144,55 +144,7 @@ export function LandingPage({ lang }: { lang: Lang }) {
       </section>
 
       {/* ════════════ AGENT ROSTER ════════════ */}
-      <section id="agents" className="relative py-28 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-[10px] font-mono text-circuit tracking-[0.3em] uppercase mb-3 text-glow-circuit animate-pulse-dim">
-              {t.agents.eyebrow}
-            </p>
-            <h2 className="text-4xl font-bold text-[#9aa8c8]" style={{ fontFamily: "var(--font-display)" }}>
-              {t.agents.title}
-            </h2>
-            <p className="text-[#4a5e80] text-sm mt-3 max-w-2xl mx-auto leading-relaxed">
-              {t.agents.intro}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {AGENT_ROSTER.map((a, i) => {
-              const label = t.agents.list[i];
-              return (
-                <div
-                  key={a.key}
-                  className="agent-card group flex items-center gap-4 pl-6 pr-4 py-4 rounded-lg bg-hull/40 animate-fade-up"
-                  style={{ ["--accent" as string]: a.color, ...stagger(i, 0.02) }}
-                >
-                  <span
-                    className="shrink-0 w-10 h-10 rounded-md border flex items-center justify-center font-semibold text-base"
-                    style={{
-                      borderColor: `${a.color}55`,
-                      background: `${a.color}10`,
-                      color: a.color,
-                      fontFamily: "var(--font-mono)",
-                    }}
-                  >
-                    {a.glyph}
-                  </span>
-                  <div className="min-w-0">
-                    <p
-                      className="text-sm font-semibold text-[#c0cde0] group-hover:text-white transition-colors tracking-wide"
-                      style={{ fontFamily: "var(--font-display)" }}
-                    >
-                      {label.name}
-                    </p>
-                    <p className="text-xs text-[#4a5e80] leading-snug mt-0.5">{label.role}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+      <AgentRoster copy={t.agents} />
 
       {/* ════════════ FEATURES ════════════ */}
       <section id="features" className="relative py-28 px-6">

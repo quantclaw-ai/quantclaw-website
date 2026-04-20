@@ -1,0 +1,9 @@
+import type { Metadata } from "next";
+import { LandingPage } from "../_lib/LandingPage";
+import { localeMetadata } from "../_lib/metadata";
+
+export const metadata: Metadata = localeMetadata("zh");
+
+export default function Page() {
+  return <LandingPage lang="zh" />;
+}

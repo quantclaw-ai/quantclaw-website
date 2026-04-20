@@ -19,18 +19,17 @@ export const LOCALE_META: Record<Lang, { label: string; short: string; href: str
 export const GITHUB_URL = "https://github.com/quantclaw-ai/QuantClaw";
 export const EMAIL = "harry@quantclaw-ai.com";
 
-// Agent roster order: Reporter sits in the middle (index 6) because it is
-// the one agent that always runs last in every plan — a natural centerpiece.
+// Agent roster order (12 agents). Reporter sits at index 5 — visual middle —
+// because it is the one agent that always runs last in every plan.
 export const AGENT_ROSTER: { key: string; color: string; glyph: string }[] = [
   { key: "scheduler",    color: "#f59e0b", glyph: "M" },
   { key: "sentinel",     color: "#f43f5e", glyph: "W" },
   { key: "researcher",   color: "#06b6d4", glyph: "?" },
   { key: "ingestor",     color: "#3b82f6", glyph: "⇵" },
   { key: "miner",        color: "#ef4444", glyph: "⛏" },
+  { key: "reporter",     color: "#f97316", glyph: "▤" },   // ← middle of 12
   { key: "trainer",      color: "#ec4899", glyph: "◈" },
-  { key: "reporter",     color: "#f97316", glyph: "▤" },   // ← middle
-  { key: "backtester",   color: "#8b5cf6", glyph: "↻" },
-  { key: "evaluator",    color: "#14b8a6", glyph: "✓" },
+  { key: "validator",    color: "#14b8a6", glyph: "✓" },    // ← backtester + evaluator merged
   { key: "executor",     color: "#22c55e", glyph: "⟶" },
   { key: "risk_monitor", color: "#a855f7", glyph: "⛨" },
   { key: "compliance",   color: "#6366f1", glyph: "§" },
@@ -104,7 +103,7 @@ const EN: Dictionary = {
   nav: { agents: "Agents", features: "Features", architecture: "Architecture", getStarted: "Get Started" },
   hero: {
     subtitle: "Open-source multi-agent harness for quantitative trading.",
-    taglineLeft: "THIRTEEN PETS",
+    taglineLeft: "TWELVE PETS",
     taglineMid: "ONE TRADING FLOOR",
     taglineRight: "PAPER-FIRST SAFETY",
     primaryCta: "Get Started",
@@ -112,12 +111,12 @@ const EN: Dictionary = {
   },
   agents: {
     eyebrow: "THE ROSTER",
-    title: "Thirteen Pets on the Floor",
+    title: "Twelve Pets on the Floor",
     intro: "Every agent has a scoped job declared in a single manifest. The planner reads it, the dispatcher runs it, and you watch it on the trading floor.",
     clickHint: "Click any pet to see what it does",
     list: [
       { name: "Scheduler",    role: "Cron trigger daemon",
-        description: "The clockwork heart of the floor. Fires cycle triggers on a configurable cron, watches for market opens and closes, and routes the \"wake up\" signal to whichever agents the current phase needs. Doesn't think — just ticks." },
+        description: "The clockwork heart of the floor. Fires cycle triggers on a configurable cron, watches for market opens and closes, and routes the \"wake up\" signal to whichever agents the current phase needs. Doesn\'t think — just ticks." },
       { name: "Sentinel",     role: "Reactive alert guardian",
         description: "Subscribes to every event on the bus and pattern-matches against a rules table — agent failure streaks, drawdown warnings, regime changes. Fires alerts routed to Telegram / Discord / Slack by urgency. Never planned, always listening." },
       { name: "Researcher",   role: "LLM-driven factor hypothesis search",
@@ -126,14 +125,12 @@ const EN: Dictionary = {
         description: "Pulls OHLCV and fundamentals from twenty data providers through a shared range-aware parquet cache. Only fetches the missing slice of any request — no duplicate downloads, and any range older than seven days is frozen immutable." },
       { name: "Miner",        role: "Evolutionary factor discovery in sandbox",
         description: "Generates candidate factor expressions with an LLM, evaluates each in the sandbox, then mutates the top performers across several generations. Every expression runs in a subprocess with AST validation and hard resource limits." },
-      { name: "Trainer",      role: "Sandboxed ML training — xgboost / lightgbm / lstm / …",
-        description: "Trains models on the discovered factors — gradient boosting, xgboost, lightgbm, lstm, transformer, and more. Emits a concrete Strategy class with signals() and allocate() implemented, saved to data/strategies/ for the backtester and executor to pick up." },
       { name: "Reporter",     role: "Executive summary, always last step",
         description: "Always the last step of any plan. Reads every upstream result in the pipeline and writes a human-readable summary into the chat narrative. No actions of its own — pure synthesis." },
-      { name: "Backtester",   role: "Historical strategy replay",
-        description: "Replays a strategy against historical data with realistic transaction costs and slippage. Computes Sharpe, drawdown, turnover, trade count, and per-trade P&L. Runs deterministically in the sandbox — no LLM involvement." },
-      { name: "Evaluator",    role: "Held-out validation, calibrated over time",
-        description: "Re-runs the chosen strategy on a held-out window that was never touched during training. Compares against the backtester's Sharpe to flag overfit candidates. Calibrated over time — learns which factor families reliably degrade out of sample." },
+      { name: "Trainer",      role: "Sandboxed ML training — xgboost / lightgbm / lstm / …",
+        description: "Trains models on the discovered factors — gradient boosting, xgboost, lightgbm, lstm, transformer, and more. Emits a concrete Strategy class with signals() and allocate() implemented, saved to data/strategies/ for the validator and executor to pick up." },
+      { name: "Validator",    role: "Sandbox replay + held-out validation",
+        description: "Replays a strategy against historical data with realistic costs, then re-runs it on a held-out window the trainer never saw. Combines what used to be two separate agents (backtester + evaluator) into one with two task modes: `backtest` for in-sample replay only, `validate` for the full flight check with overfit verdict." },
       { name: "Executor",     role: "Paper / live order submission",
         description: "In paper phase, loads each active strategy, computes target weights, aggregates them across deployments, and submits rebalance orders through the paper broker. In live mode, every order batch goes through compliance and risk gates first." },
       { name: "Risk Monitor", role: "Drawdown, concentration, leverage daemon",
@@ -141,14 +138,14 @@ const EN: Dictionary = {
       { name: "Compliance",   role: "Rule-based trade gatekeeper",
         description: "Not an LLM — pure rule evaluation. Checks each order batch against jurisdiction rules, account restrictions, and sanctioned-instrument lists. Blocks violations before the broker ever sees them." },
       { name: "Debugger",     role: "LLM diagnostic on cycle failures",
-        description: "Only runs when something has failed. Given the failing step's error context, stack trace, and surrounding cycle results, proposes a root cause plus an adjustment for the next cycle. Purely reactive — never part of a happy path." },
+        description: "Only runs when something has failed. Given the failing step\'s error context, stack trace, and surrounding cycle results, proposes a root cause plus an adjustment for the next cycle. Purely reactive — never part of a happy path." },
     ],
   },
   features: {
     eyebrow: "CAPABILITIES",
     title: "What the Harness Actually Does",
     items: [
-      { tag: "AGENTS",         title: "13 Specialists, One Floor",
+      { tag: "AGENTS",         title: "12 Specialists, One Floor",
         desc: "Each agent has a scoped job, declared inputs/outputs, and a matching pet on the dashboard trading floor — complete with breathing, blinking, and species-specific idle animations." },
       { tag: "ROUTING",        title: "Multi-Provider LLM Routing",
         desc: "Anthropic, OpenAI, Google Gemini, and local Ollama — swap providers in config, not code. OAuth via a Node.js sidecar means Claude Code / Codex / Gemini CLI logins just work." },
@@ -173,7 +170,7 @@ const EN: Dictionary = {
     layers: [
       { name: "Mission",       desc: "CampaignManager compiles broad goals into phase state machines" },
       { name: "Orchestration", desc: "OODA + Planner + Dispatcher + LLMRouter + OAuth sidecar" },
-      { name: "Agent",         desc: "Thirteen specialists declared in a single manifest" },
+      { name: "Agent",         desc: "Twelve specialists declared in a single manifest" },
       { name: "Execution",     desc: "Sandbox for LLM code, narrow Strategy contract, paper runner" },
       { name: "Portfolio",     desc: "DeploymentAllocator with active / watchlist / retired tiers" },
       { name: "Memory",        desc: "Append-only Playbook JSONL + queryable SQLite state DB" },
@@ -222,7 +219,7 @@ const ZH: Dictionary = {
   nav: { agents: "代理", features: "功能", architecture: "架构", getStarted: "开始使用" },
   hero: {
     subtitle: "开源多智能体量化交易框架。",
-    taglineLeft: "十三只宠物",
+    taglineLeft: "十二只宠物",
     taglineMid: "一个交易大厅",
     taglineRight: "纸面交易优先",
     primaryCta: "开始使用",
@@ -230,7 +227,7 @@ const ZH: Dictionary = {
   },
   agents: {
     eyebrow: "名册",
-    title: "交易大厅上的十三只宠物",
+    title: "交易大厅上的十二只宠物",
     intro: "每个代理在统一清单中都有明确的职责。规划者读取它,调度者执行它,你则在交易大厅上观察它们工作。",
     clickHint: "点击任一只宠物,查看它的具体工作",
     list: [
@@ -244,14 +241,12 @@ const ZH: Dictionary = {
         description: "通过共享的区间感知 parquet 缓存,从二十家数据源拉取 OHLCV 和基本面。只抓取请求中缺失的区间 — 无重复下载,七天之外的历史区间被冻结为不可变。" },
       { name: "矿工 Miner",            role: "沙盒中的演化式因子发现",
         description: "用 LLM 生成候选因子表达式,在沙盒中评估每一个,并在若干代中让优秀者继续变异。每个表达式都在带 AST 校验与硬资源上限的子进程中运行。" },
-      { name: "训练师 Trainer",        role: "沙盒化 ML 训练 — xgboost / lightgbm / lstm / …",
-        description: "在发现的因子上训练模型 — gradient boosting、xgboost、lightgbm、lstm、transformer 等。产出实现了 signals() 与 allocate() 的具体 Strategy 类,保存到 data/strategies/ 以供回测器和执行器使用。" },
       { name: "报告员 Reporter",       role: "执行摘要,总是流水线最后一步",
         description: "任何计划的最后一步。读取流水线上的每一个上游结果,把人类可读的摘要写入聊天叙事。它没有自己的动作 — 纯粹的综合。" },
-      { name: "回测器 Backtester",     role: "历史策略回放",
-        description: "按真实交易成本与滑点模型,把策略在历史数据上回放。计算 Sharpe、回撤、换手、交易数和每笔盈亏。在沙盒中确定性运行 — 不涉及 LLM。" },
-      { name: "评估器 Evaluator",      role: "持出法校验,长期持续校准",
-        description: "在训练期间从未接触的持出窗口上重新运行选中的策略。与回测器的 Sharpe 对比以识别过拟合候选。长期持续校准 — 学会哪些因子家族在样本外会稳定衰减。" },
+      { name: "训练师 Trainer",        role: "沙盒化 ML 训练 — xgboost / lightgbm / lstm / …",
+        description: "在发现的因子上训练模型 — gradient boosting、xgboost、lightgbm、lstm、transformer 等。产出实现了 signals() 与 allocate() 的具体 Strategy 类,保存到 data/strategies/ 以供校验器和执行器使用。" },
+      { name: "校验器 Validator",      role: "沙盒回放 + 持出法校验",
+        description: "用真实成本在历史数据上回放策略,再在训练器从未接触的持出窗口上重新运行。把原本两个代理(回测器 + 评估器)合并为一个,提供两种任务模式:`backtest` 只做样本内回放,`validate` 进行完整飞行检查并给出过拟合判决。" },
       { name: "执行器 Executor",       role: "纸面 / 实盘订单提交",
         description: "在纸面阶段,加载每个活跃策略,计算目标权重,跨部署聚合,并通过纸面券商提交再平衡订单。在实盘模式下,每一批订单都会先走合规与风控关口。" },
       { name: "风控 Risk Monitor",     role: "回撤、集中度、杠杆监控守护",
@@ -266,7 +261,7 @@ const ZH: Dictionary = {
     eyebrow: "能力",
     title: "这套框架究竟做了什么",
     items: [
-      { tag: "代理",       title: "十三位专家,一个大厅",
+      { tag: "代理",       title: "十二位专家,一个大厅",
         desc: "每个代理都有明确的职责、声明的输入输出,并在仪表盘交易大厅上拥有一只对应的宠物 — 它们会呼吸、眨眼,每种物种还有独特的空闲动画。" },
       { tag: "路由",       title: "多提供商 LLM 路由",
         desc: "Anthropic、OpenAI、Google Gemini 和本地 Ollama — 只需修改配置就能切换提供商,无需改代码。通过 Node.js sidecar 走 OAuth,Claude Code / Codex / Gemini CLI 登录开箱即用。" },
@@ -291,7 +286,7 @@ const ZH: Dictionary = {
     layers: [
       { name: "任务",       desc: "CampaignManager 把宽泛目标编译为阶段状态机" },
       { name: "编排",       desc: "OODA + Planner + Dispatcher + LLMRouter + OAuth sidecar" },
-      { name: "代理",       desc: "清单中声明的十三位专家" },
+      { name: "代理",       desc: "清单中声明的十二位专家" },
       { name: "执行",       desc: "LLM 代码沙盒、精简 Strategy 契约、纸面执行器" },
       { name: "组合",       desc: "DeploymentAllocator 管理 活跃 / 观察 / 退役 三档" },
       { name: "记忆",       desc: "只追加的 Playbook JSONL + 可查询的 SQLite 状态数据库" },
@@ -307,7 +302,7 @@ const ZH: Dictionary = {
       { title: "安装",              desc: "pip install quantclaw;quantclaw dashboard 会在你本机启动后端、sidecar 和 Next.js 仪表盘。" },
       { title: "认证",              desc: "通过 Claude Code / Codex / Gemini CLI OAuth 登录,或填入 API key。也支持本地 Ollama 模型 — 离线可用。" },
       { title: "设定目标",          desc: "自然对话即可。像「go make me cash」或「find alpha」这样的宽泛目标会被编译为持续运行的盈利活动。" },
-      { title: "观察交易大厅",      desc: "十三只宠物代理在交易大厅实时工作。审批计划、按下停止、调整风险上限 — 你始终是 CEO。" },
+      { title: "观察交易大厅",      desc: "十二只宠物代理在交易大厅实时工作。审批计划、按下停止、调整风险上限 — 你始终是 CEO。" },
       { title: "先纸面,后实盘",    desc: "活动默认纸面优先。回撤破限或执行器连续失败会自动暂停。你决定何时上实盘。" },
     ],
   },
@@ -340,7 +335,7 @@ const JA: Dictionary = {
   nav: { agents: "エージェント", features: "機能", architecture: "アーキテクチャ", getStarted: "はじめる" },
   hero: {
     subtitle: "オープンソースのマルチエージェント型クオンツ取引ハーネス。",
-    taglineLeft: "十三匹のペット",
+    taglineLeft: "十二匹のペット",
     taglineMid: "一つのトレーディングフロア",
     taglineRight: "ペーパーファースト",
     primaryCta: "はじめる",
@@ -348,7 +343,7 @@ const JA: Dictionary = {
   },
   agents: {
     eyebrow: "ロスター",
-    title: "トレーディングフロアの十三匹",
+    title: "トレーディングフロアの十二匹",
     intro: "すべてのエージェントは単一のマニフェストで役割を宣言しています。プランナーが読み、ディスパッチャが実行し、あなたはトレーディングフロアで観察します。",
     clickHint: "ペットをクリックして働き方を見る",
     list: [
@@ -362,14 +357,12 @@ const JA: Dictionary = {
         description: "20 のデータ提供元から OHLCV とファンダメンタルを、共通のレンジ対応 parquet キャッシュ経由で取得します。リクエストの欠けているスライスだけを取りに行く — 重複ダウンロードなし、7 日より古いレンジは不変として凍結。" },
       { name: "Miner マイナー",            role: "サンドボックス内での進化的ファクター発見",
         description: "LLM で候補ファクター式を生成し、サンドボックスで各式を評価、上位を何世代かにわたって変異させます。すべての式は AST 検証とハードなリソース上限付きのサブプロセスで走ります。" },
-      { name: "Trainer トレーナー",        role: "サンドボックス化された ML 学習 — xgboost / lightgbm / lstm / …",
-        description: "発見されたファクターでモデルを学習します — gradient boosting、xgboost、lightgbm、lstm、transformer など。signals() と allocate() を実装した具体的な Strategy クラスを data/strategies/ に保存し、バックテスターとエグゼキューターが拾えるようにします。" },
       { name: "Reporter レポーター",       role: "常に最後に走るエグゼクティブサマリー",
         description: "どの計画でも常に最終ステップ。パイプラインのすべての上流結果を読み、人間が読めるサマリーをチャットナラティブに書き込みます。独自のアクションはなし — 純粋な総合。" },
-      { name: "Backtester バックテスター", role: "過去データでの戦略リプレイ",
-        description: "現実的な取引コストとスリッページのモデルで、戦略を過去データ上にリプレイ。Sharpe、ドローダウン、回転率、取引数、取引ごとの PnL を計算。サンドボックスで決定論的に走ります — LLM は使いません。" },
-      { name: "Evaluator エバリュエーター", role: "ホールドアウト検証、長期キャリブレーション",
-        description: "学習中に一切触れていないホールドアウト窓で、選ばれた戦略を再実行します。バックテスターの Sharpe と比較し過学習候補を炙り出します。長期キャリブレーション — どのファクター群がアウトオブサンプルで確実に劣化するかを学びます。" },
+      { name: "Trainer トレーナー",        role: "サンドボックス化された ML 学習 — xgboost / lightgbm / lstm / …",
+        description: "発見されたファクターでモデルを学習します — gradient boosting、xgboost、lightgbm、lstm、transformer など。signals() と allocate() を実装した具体的な Strategy クラスを data/strategies/ に保存し、バリデーターとエグゼキューターが拾えるようにします。" },
+      { name: "Validator バリデーター",    role: "サンドボックス再生 + ホールドアウト検証",
+        description: "現実的なコストで過去データ上に戦略をリプレイし、さらにトレーナーが触れていないホールドアウト窓で再走行します。以前の 2 エージェント(バックテスター + エバリュエーター)を 1 つに統合し、2 つのタスクモードを提供 —— `backtest` はインサンプル再生のみ、`validate` は過学習判定付きのフル飛行検査。" },
       { name: "Executor エグゼキューター", role: "ペーパー / ライブ注文の送信",
         description: "ペーパー期間では、各アクティブ戦略をロードし、ターゲットウェイトを算出、デプロイ全体で集約、ペーパーブローカー経由でリバランス注文を送信します。ライブモードでは、注文バッチは先にコンプライアンスとリスクゲートを通ります。" },
       { name: "Risk Monitor リスクモニター", role: "ドローダウン・集中・レバレッジ監視デーモン",
@@ -384,7 +377,7 @@ const JA: Dictionary = {
     eyebrow: "機能",
     title: "このハーネスが実際にやること",
     items: [
-      { tag: "エージェント",   title: "十三の専門家、一つのフロア",
+      { tag: "エージェント",   title: "十二の専門家、一つのフロア",
         desc: "各エージェントには明確な役割、宣言された入出力、そしてダッシュボードのトレーディングフロア上に対応するペットがいます — 呼吸し、まばたきし、種ごとに固有のアイドルアニメーションを持ちます。" },
       { tag: "ルーティング",   title: "マルチプロバイダ LLM ルーティング",
         desc: "Anthropic、OpenAI、Google Gemini、ローカルの Ollama — コードではなく設定でプロバイダを切り替え。Node.js サイドカー経由の OAuth で Claude Code / Codex / Gemini CLI のログインがそのまま使えます。" },
@@ -409,7 +402,7 @@ const JA: Dictionary = {
     layers: [
       { name: "ミッション",     desc: "CampaignManager が広いゴールをフェーズ状態機械へコンパイル" },
       { name: "オーケストレーション", desc: "OODA + Planner + Dispatcher + LLMRouter + OAuth サイドカー" },
-      { name: "エージェント",   desc: "単一マニフェストに宣言された十三の専門家" },
+      { name: "エージェント",   desc: "単一マニフェストに宣言された十二の専門家" },
       { name: "実行",           desc: "LLM コードのサンドボックス、絞った Strategy 契約、ペーパーランナー" },
       { name: "ポートフォリオ", desc: "DeploymentAllocator が アクティブ / ウォッチリスト / リタイア を管理" },
       { name: "メモリ",         desc: "追記専用の Playbook JSONL + 問い合わせ可能な SQLite 状態 DB" },
@@ -425,7 +418,7 @@ const JA: Dictionary = {
       { title: "インストール",      desc: "pip install quantclaw;quantclaw dashboard がバックエンド・サイドカー・Next.js ダッシュボードをローカルで起動します。" },
       { title: "認証",              desc: "Claude Code / Codex / Gemini CLI の OAuth でサインインするか、API キーを設定。Ollama のローカルモデルなら通信なしでも動きます。" },
       { title: "ゴールを設定",      desc: "自然な会話で指示します。「go make me cash」や「find alpha」のような広いゴールは、常駐するプロフィットキャンペーンへコンパイルされます。" },
-      { title: "フロアを見る",      desc: "十三匹のペット・エージェントがトレーディングフロアでリアルタイムに働きます。計画の承認、停止ボタン、リスク上限の調整 — あなたは CEO のまま。" },
+      { title: "フロアを見る",      desc: "十二匹のペット・エージェントがトレーディングフロアでリアルタイムに働きます。計画の承認、停止ボタン、リスク上限の調整 — あなたは CEO のまま。" },
       { title: "ペーパー、そしてライブ", desc: "キャンペーンはペーパーファースト。ドローダウン突破やエグゼキューター連続失敗で自動停止。ライブ昇格はあなたの判断で。" },
     ],
   },

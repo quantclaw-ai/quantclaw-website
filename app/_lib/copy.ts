@@ -103,7 +103,7 @@ const EN: Dictionary = {
   nav: { agents: "Agents", features: "Features", architecture: "Architecture", getStarted: "Get Started" },
   hero: {
     subtitle: "Open-source campaign-driven agent harness for quantitative trading.",
-    taglineLeft: "TWELVE PETS",
+    taglineLeft: "TWELVE CREWMATES",
     taglineMid: "ONE TRADING FLOOR",
     taglineRight: "PAPER-FIRST SAFETY",
     primaryCta: "Get Started",
@@ -111,9 +111,9 @@ const EN: Dictionary = {
   },
   agents: {
     eyebrow: "THE ROSTER",
-    title: "Twelve Pets on the Floor",
+    title: "Twelve Crewmates on the Floor",
     intro: "Every agent has a scoped job declared in a single manifest. The planner reads it, the dispatcher runs it, and you watch it on the trading floor.",
-    clickHint: "Click any pet to see what it does",
+    clickHint: "Click any crewmate to see what it does",
     list: [
       { name: "Scheduler",    role: "Cron trigger daemon",
         description: "The clockwork heart of the floor. Fires cycle triggers on a configurable cron, watches for market opens and closes, and routes the \"wake up\" signal to whichever agents the current phase needs. Doesn\'t think — just ticks." },
@@ -146,7 +146,7 @@ const EN: Dictionary = {
     title: "What the Harness Actually Does",
     items: [
       { tag: "AGENTS",         title: "12 Specialists, One Floor",
-        desc: "Each agent has a scoped job, declared inputs/outputs, and a matching pet on the dashboard trading floor — complete with breathing, blinking, and species-specific idle animations." },
+        desc: "Each agent has a scoped job, declared inputs/outputs, and a matching crewmate on the dashboard trading floor — complete with breathing, blinking, and species-specific idle animations." },
       { tag: "ROUTING",        title: "Multi-Provider LLM Routing",
         desc: "Anthropic, OpenAI, Google Gemini, and local Ollama — swap providers in config, not code. OAuth via a Node.js sidecar means Claude Code / Codex / Gemini CLI logins just work." },
       { tag: "CAPITAL SAFETY", title: "Paper-First Campaigns",
@@ -186,7 +186,7 @@ const EN: Dictionary = {
       { title: "Install",          desc: "pip install quantclaw; quantclaw dashboard launches the backend, sidecar, and Next.js dashboard on your machine." },
       { title: "Authenticate",     desc: "Sign in via Claude Code / Codex / Gemini CLI OAuth, or set an API key. Local models via Ollama work too — no network required." },
       { title: "Set a goal",       desc: "Chat naturally. Broad goals like \"go make me cash\" or \"find alpha\" compile into a standing profit campaign." },
-      { title: "Watch the floor",  desc: "Twelve pet-agents work in real time on the trading floor. Approve plans, hit the stop button, adjust risk limits — you stay CEO." },
+      { title: "Watch the floor",  desc: "Twelve crewmates work in real time on the trading floor. Approve plans, hit the stop button, adjust risk limits — you stay CEO." },
       { title: "Paper, then live", desc: "Campaigns run paper-first. Drawdown breach and executor-failure streaks auto-pause. Promote to live only when you choose." },
     ],
   },
@@ -201,8 +201,8 @@ const EN: Dictionary = {
     ],
   },
   cta: {
-    titleHi: "Raise Your Own",
-    titleLow: " Pet Farm",
+    titleHi: "Assemble Your Own",
+    titleLow: " Crew",
     body: "MIT-licensed, runs on your own machine, every agent visible, inspectable, and yours.",
     button: "Get Started on GitHub",
   },
@@ -219,7 +219,7 @@ const ZH: Dictionary = {
   nav: { agents: "代理", features: "功能", architecture: "架构", getStarted: "开始使用" },
   hero: {
     subtitle: "开源多智能体量化交易框架。",
-    taglineLeft: "十二只宠物",
+    taglineLeft: "十二位船员",
     taglineMid: "一个交易大厅",
     taglineRight: "纸面交易优先",
     primaryCta: "开始使用",
@@ -227,9 +227,9 @@ const ZH: Dictionary = {
   },
   agents: {
     eyebrow: "名册",
-    title: "交易大厅上的十二只宠物",
+    title: "交易大厅上的十二位船员",
     intro: "每个代理在统一清单中都有明确的职责。规划者读取它,调度者执行它,你则在交易大厅上观察它们工作。",
-    clickHint: "点击任一只宠物,查看它的具体工作",
+    clickHint: "点击任一位船员,查看它的具体工作",
     list: [
       { name: "调度器 Scheduler",      role: "定时触发守护进程",
         description: "交易大厅的时钟心脏。按可配置的 cron 触发循环,监听开市与闭市,把「唤醒」信号路由到当前阶段需要的代理。它不思考 — 只是滴答作响。" },
@@ -262,7 +262,7 @@ const ZH: Dictionary = {
     title: "这套框架究竟做了什么",
     items: [
       { tag: "代理",       title: "十二位专家,一个大厅",
-        desc: "每个代理都有明确的职责、声明的输入输出,并在仪表盘交易大厅上拥有一只对应的宠物 — 它们会呼吸、眨眼,每种物种还有独特的空闲动画。" },
+        desc: "每个代理都有明确的职责、声明的输入输出,并在仪表盘交易大厅上拥有一位对应的船员 — 他们会呼吸、眨眼,每种物种还有独特的空闲动画。" },
       { tag: "路由",       title: "多提供商 LLM 路由",
         desc: "Anthropic、OpenAI、Google Gemini 和本地 Ollama — 只需修改配置就能切换提供商,无需改代码。通过 Node.js sidecar 走 OAuth,Claude Code / Codex / Gemini CLI 登录开箱即用。" },
       { tag: "资金安全",   title: "纸面交易优先",
@@ -302,7 +302,7 @@ const ZH: Dictionary = {
       { title: "安装",              desc: "pip install quantclaw;quantclaw dashboard 会在你本机启动后端、sidecar 和 Next.js 仪表盘。" },
       { title: "认证",              desc: "通过 Claude Code / Codex / Gemini CLI OAuth 登录,或填入 API key。也支持本地 Ollama 模型 — 离线可用。" },
       { title: "设定目标",          desc: "自然对话即可。像「go make me cash」或「find alpha」这样的宽泛目标会被编译为持续运行的盈利活动。" },
-      { title: "观察交易大厅",      desc: "十二只宠物代理在交易大厅实时工作。审批计划、按下停止、调整风险上限 — 你始终是 CEO。" },
+      { title: "观察交易大厅",      desc: "十二位船员在交易大厅实时工作。审批计划、按下停止、调整风险上限 — 你始终是 CEO。" },
       { title: "先纸面,后实盘",    desc: "活动默认纸面优先。回撤破限或执行器连续失败会自动暂停。你决定何时上实盘。" },
     ],
   },
@@ -317,8 +317,8 @@ const ZH: Dictionary = {
     ],
   },
   cta: {
-    titleHi: "饲养你自己的",
-    titleLow: " 宠物农场",
+    titleHi: "组建你自己的",
+    titleLow: " 船员团",
     body: "MIT 许可,跑在你自己的机器上,每一个代理都可见、可审、属于你。",
     button: "前往 GitHub 开始",
   },
@@ -335,7 +335,7 @@ const JA: Dictionary = {
   nav: { agents: "エージェント", features: "機能", architecture: "アーキテクチャ", getStarted: "はじめる" },
   hero: {
     subtitle: "オープンソースのマルチエージェント型クオンツ取引ハーネス。",
-    taglineLeft: "十二匹のペット",
+    taglineLeft: "十二人のクルー",
     taglineMid: "一つのトレーディングフロア",
     taglineRight: "ペーパーファースト",
     primaryCta: "はじめる",
@@ -343,9 +343,9 @@ const JA: Dictionary = {
   },
   agents: {
     eyebrow: "ロスター",
-    title: "トレーディングフロアの十二匹",
+    title: "トレーディングフロアの十二人のクルー",
     intro: "すべてのエージェントは単一のマニフェストで役割を宣言しています。プランナーが読み、ディスパッチャが実行し、あなたはトレーディングフロアで観察します。",
-    clickHint: "ペットをクリックして働き方を見る",
+    clickHint: "クルーをクリックして働き方を見る",
     list: [
       { name: "Scheduler スケジューラー",  role: "cron トリガーのデーモン",
         description: "トレーディングフロアの時計仕掛けの心臓。設定可能な cron で周期トリガーを発火し、開場・閉場を監視、「起きろ」の合図を現フェーズで必要なエージェントへルーティングします。考えません — ただ刻みます。" },
@@ -378,7 +378,7 @@ const JA: Dictionary = {
     title: "このハーネスが実際にやること",
     items: [
       { tag: "エージェント",   title: "十二の専門家、一つのフロア",
-        desc: "各エージェントには明確な役割、宣言された入出力、そしてダッシュボードのトレーディングフロア上に対応するペットがいます — 呼吸し、まばたきし、種ごとに固有のアイドルアニメーションを持ちます。" },
+        desc: "各エージェントには明確な役割、宣言された入出力、そしてダッシュボードのトレーディングフロア上に対応するクルーがいます — 呼吸し、まばたきし、種ごとに固有のアイドルアニメーションを持ちます。" },
       { tag: "ルーティング",   title: "マルチプロバイダ LLM ルーティング",
         desc: "Anthropic、OpenAI、Google Gemini、ローカルの Ollama — コードではなく設定でプロバイダを切り替え。Node.js サイドカー経由の OAuth で Claude Code / Codex / Gemini CLI のログインがそのまま使えます。" },
       { tag: "資金安全性",     title: "ペーパーファーストのキャンペーン",
@@ -418,7 +418,7 @@ const JA: Dictionary = {
       { title: "インストール",      desc: "pip install quantclaw;quantclaw dashboard がバックエンド・サイドカー・Next.js ダッシュボードをローカルで起動します。" },
       { title: "認証",              desc: "Claude Code / Codex / Gemini CLI の OAuth でサインインするか、API キーを設定。Ollama のローカルモデルなら通信なしでも動きます。" },
       { title: "ゴールを設定",      desc: "自然な会話で指示します。「go make me cash」や「find alpha」のような広いゴールは、常駐するプロフィットキャンペーンへコンパイルされます。" },
-      { title: "フロアを見る",      desc: "十二匹のペット・エージェントがトレーディングフロアでリアルタイムに働きます。計画の承認、停止ボタン、リスク上限の調整 — あなたは CEO のまま。" },
+      { title: "フロアを見る",      desc: "十二人のクルーがトレーディングフロアでリアルタイムに働きます。計画の承認、停止ボタン、リスク上限の調整 — あなたは CEO のまま。" },
       { title: "ペーパー、そしてライブ", desc: "キャンペーンはペーパーファースト。ドローダウン突破やエグゼキューター連続失敗で自動停止。ライブ昇格はあなたの判断で。" },
     ],
   },
@@ -434,7 +434,7 @@ const JA: Dictionary = {
   },
   cta: {
     titleHi: "あなた自身の",
-    titleLow: " ペット牧場を",
+    titleLow: " クルーを",
     body: "MIT ライセンス、あなたのマシン上で動作、すべてのエージェントが可視・検査可能・あなたのもの。",
     button: "GitHub ではじめる",
   },

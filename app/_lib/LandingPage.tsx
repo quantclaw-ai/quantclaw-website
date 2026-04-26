@@ -126,15 +126,6 @@ export function LandingPage({ lang }: { lang: Lang }) {
             >
               {t.hero.primaryCta}
             </a>
-            <a
-              href={GITHUB_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-8 py-3 rounded-lg border border-trace text-[#7a8aa8] font-medium text-base hover:border-circuit/40 hover:text-circuit-light transition-all"
-              style={{ fontFamily: "var(--font-display)" }}
-            >
-              {t.hero.secondaryCta}
-            </a>
           </div>
         </div>
 

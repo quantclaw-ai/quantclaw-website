@@ -102,7 +102,7 @@ const EN: Dictionary = {
   },
   nav: { agents: "Agents", features: "Features", architecture: "Architecture", getStarted: "Get Started" },
   hero: {
-    subtitle: "Open-source multi-agent harness for quantitative trading.",
+    subtitle: "Open-source campaign-driven agent harness for quantitative trading.",
     taglineLeft: "TWELVE PETS",
     taglineMid: "ONE TRADING FLOOR",
     taglineRight: "PAPER-FIRST SAFETY",

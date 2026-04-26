@@ -323,7 +323,6 @@ export function LandingPage({ lang }: { lang: Lang }) {
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
             <img src="/crab.png" alt="QuantClaw" className="w-6 h-6 object-contain" />
-            <span className="text-sm font-mono text-[#2a3e5a]">QuantClaw v0.1.0</span>
           </div>
 
           <div className="flex items-center gap-6">

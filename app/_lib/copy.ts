@@ -17,7 +17,7 @@ export const LOCALE_META: Record<Lang, { label: string; short: string; href: str
 // ─── Fixed data (no translation) ────────────────────────────────────
 
 export const GITHUB_URL = "https://github.com/quantclaw-ai/QuantClaw";
-export const EMAIL = "harry@quantclaw-ai.com";
+export const EMAIL = "claw@quantclaw-ai.com";
 
 // Agent roster order (12 agents). Reporter sits at index 5 — visual middle —
 // because it is the one agent that always runs last in every plan.

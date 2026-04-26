@@ -183,7 +183,7 @@ const EN: Dictionary = {
     titlePrefix: "From",
     titleTo: "to",
     steps: [
-      { title: "Install",          desc: "pip install quantclaw; quantclaw dashboard launches the backend, sidecar, and Next.js dashboard on your machine." },
+      { title: "Install",          desc: "npm install -g quantclaw; quantclaw start launches the backend, sidecar, and Next.js dashboard on your machine." },
       { title: "Authenticate",     desc: "Sign in via Claude Code / Codex / Gemini CLI OAuth, or set an API key. Local models via Ollama work too — no network required." },
       { title: "Set a goal",       desc: "Chat naturally. Broad goals like \"go make me cash\" or \"find alpha\" compile into a standing profit campaign." },
       { title: "Watch the floor",  desc: "Twelve crewmates work in real time on the trading floor. Approve plans, hit the stop button, adjust risk limits — you stay CEO." },
@@ -299,7 +299,7 @@ const ZH: Dictionary = {
     titlePrefix: "从",
     titleTo: "到",
     steps: [
-      { title: "安装",              desc: "pip install quantclaw;quantclaw dashboard 会在你本机启动后端、sidecar 和 Next.js 仪表盘。" },
+      { title: "安装",              desc: "npm install -g quantclaw;quantclaw start 会在你本机启动后端、sidecar 和 Next.js 仪表盘。" },
       { title: "认证",              desc: "通过 Claude Code / Codex / Gemini CLI OAuth 登录,或填入 API key。也支持本地 Ollama 模型 — 离线可用。" },
       { title: "设定目标",          desc: "自然对话即可。像「go make me cash」或「find alpha」这样的宽泛目标会被编译为持续运行的盈利活动。" },
       { title: "观察交易大厅",      desc: "十二位船员在交易大厅实时工作。审批计划、按下停止、调整风险上限 — 你始终是 CEO。" },
@@ -415,7 +415,7 @@ const JA: Dictionary = {
     titlePrefix: "",
     titleTo: "まで",
     steps: [
-      { title: "インストール",      desc: "pip install quantclaw;quantclaw dashboard がバックエンド・サイドカー・Next.js ダッシュボードをローカルで起動します。" },
+      { title: "インストール",      desc: "npm install -g quantclaw;quantclaw start がバックエンド・サイドカー・Next.js ダッシュボードをローカルで起動します。" },
       { title: "認証",              desc: "Claude Code / Codex / Gemini CLI の OAuth でサインインするか、API キーを設定。Ollama のローカルモデルなら通信なしでも動きます。" },
       { title: "ゴールを設定",      desc: "自然な会話で指示します。「go make me cash」や「find alpha」のような広いゴールは、常駐するプロフィットキャンペーンへコンパイルされます。" },
       { title: "フロアを見る",      desc: "十二人のクルーがトレーディングフロアでリアルタイムに働きます。計画の承認、停止ボタン、リスク上限の調整 — あなたは CEO のまま。" },

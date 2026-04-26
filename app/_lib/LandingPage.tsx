@@ -227,7 +227,7 @@ export function LandingPage({ lang }: { lang: Lang }) {
               style={{ fontFamily: "var(--font-display)" }}
             >
               {t.how.titlePrefix}{" "}
-              <span className="font-mono text-gold text-[0.85em]">pip install</span>{" "}
+              <span className="font-mono text-gold text-[0.85em]">npm install</span>{" "}
               {t.how.titleTo}{" "}
               <span className="font-mono text-gold text-[0.85em]">&ldquo;go make me cash&rdquo;</span>
             </h2>

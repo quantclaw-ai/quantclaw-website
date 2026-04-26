@@ -186,7 +186,7 @@ const EN: Dictionary = {
       { title: "Install",          desc: "pip install quantclaw; quantclaw dashboard launches the backend, sidecar, and Next.js dashboard on your machine." },
       { title: "Authenticate",     desc: "Sign in via Claude Code / Codex / Gemini CLI OAuth, or set an API key. Local models via Ollama work too — no network required." },
       { title: "Set a goal",       desc: "Chat naturally. Broad goals like \"go make me cash\" or \"find alpha\" compile into a standing profit campaign." },
-      { title: "Watch the floor",  desc: "Thirteen pet-agents work in real time on the trading floor. Approve plans, hit the stop button, adjust risk limits — you stay CEO." },
+      { title: "Watch the floor",  desc: "Twelve pet-agents work in real time on the trading floor. Approve plans, hit the stop button, adjust risk limits — you stay CEO." },
       { title: "Paper, then live", desc: "Campaigns run paper-first. Drawdown breach and executor-failure streaks auto-pause. Promote to live only when you choose." },
     ],
   },
